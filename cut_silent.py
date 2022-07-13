@@ -1,7 +1,6 @@
 import os
 import shutil
 import numpy as np
-import matplotlib.pyplot as plt
 import wave
 
 base_dir = "test_data"
@@ -36,11 +35,6 @@ for fname in wav_files:
         b = amp > thres
         start_voice = b.tolist().index(True)
         voice = amp[start_voice:]
-        print(t)
-        print(voice.astype("int16"))
-        print(t[start_voice:])
-        plt.figure(figsize=(18, 6))
-        plt.plot(t[start_voice:], voice)
     with wave.open(os.path.join(data_dir, fname), "w") as w:
         w.setnchannels(channel)
         w.setsampwidth(sample_width)
