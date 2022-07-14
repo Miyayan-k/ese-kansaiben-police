@@ -3,10 +3,13 @@ import shutil
 import numpy as np
 import wave
 
+
+# augmentationの直前に実施。
+
+# テストしたい場合
 base_dir = "test_data"
 data_dir = "test_data/cut_silent"
 
-#  augmentationの直前に実施。
 # 関西弁実施時
 # base_dir = "kansaiben/data"
 # data_dir = "kansaiben/cut_silent"
@@ -30,10 +33,13 @@ for fname in wav_files:
         print(channel, sample_width, sample_rate, frames, comptype, compname)
         data = np.frombuffer(w.readframes(frames), dtype="int16").astype(np.float32)
         t = np.arange(0, len(data))/sample_rate
+        # 平均的に考慮して、静寂を2000以下に設定。あまりに静かなデータはすべてカットされる可能性に留意
         thres = 2000
         amp = np.abs(data)
         b = amp > thres
+        # 声の認知開始ポイント
         start_voice = b.tolist().index(True)
+        # 認知後の配列を取得
         voice = data[start_voice:]
     with wave.open(os.path.join(data_dir, fname), "wb") as w:
         w.setnchannels(channel)
